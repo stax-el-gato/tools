@@ -7,12 +7,16 @@ gen_pw() {
 # Enter in the user name you need to add to aws.
 echo "Please Enter in User Name you are adding to AWS:" 
 read user 
+echo "Please enter the Group Name the user should be in:"
+read group
   password=$(gen_pw)
   aws iam create-user --user-name "$user"
   aws iam create-access-key --user-name "$user"
+  # aws iam list-attached-user-policies --user-name "$user"
   # User Groups
   # Allow Users to manage user creds and MFA
-  aws iam add-user-to-group --user-name="$user" --group-name IAM-users-manage-own-credentials
+  aws iam add-user-to-group --user-name="$user" --group-name $group
+  #aws iam add-user-to-group --user-name="$user" --group-name IAM-users-manage-own-credentials
   # For QA Builds
   #aws iam add-user-to-group --user-name="$user" --group-name QABuilds
   aws iam create-login-profile --user-name="$user" --password="$password" --password-reset-required
